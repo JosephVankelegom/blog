@@ -1,0 +1,4 @@
+baseURL = 'https://josephvank.com/'
+languageCode = 'en-us'
+title = 'josephvank'
+theme = 'PaperMod'
