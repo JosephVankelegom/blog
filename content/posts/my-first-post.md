@@ -7,7 +7,7 @@ summary = "this is a description of the post"
 
 ## Introduction
 
-I'm so smart 
+I'm so smart, update test 
 This is **bold** text, and this is *emphasized* text.
 
 Visit the [Hugo](https://gohugo.io) website!
