@@ -12,7 +12,7 @@ After an unknow quantity of games we wanted to start recording the scores of our
 We keep all the games scores on a excel file, from there we wanted additional informations about our performance and I decided to create a little python notebook to do taht.
 I just learned about deepnote and decided to try it out (several pieces of code where generated with the IA).
 
-Visit the [Notebook](https://gohugo.io)!
+Visit the [Notebook](https://deepnote.com/workspace/vanjotom-690650e7-21e6-4e93-ab8c-6a827642f688/project/BabyFoot-4a2ef5da-34d9-49ae-ac9a-5186cf57ff1d/notebook/CleanCsv-7f49f2b3e4e64f3fb8a2e2f49c1d9c11)!
 
 The first step was to clean the excel of useless information:
 
