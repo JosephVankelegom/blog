@@ -8,21 +8,57 @@ summary = "Statistiques from baby-games played with friends"
 ## Introduction
 
 During the year 2024, I started playing baby-foot with friends.
-After some time we obviously became quite competitive about and we wanted to know our personal stastistiques.
-After an unknow quantity of games we wanted to start recording the scores of our games to increase the challenge of the games.
-We keep all the games scores on a excel file, from there we wanted additional informations about our performance and I decided to create a little python notebook to do taht.
-I just learned about deepnote and decided to try it out (several pieces of code where generated with the IA).
+After some time we obviously became quite competitive about and we wanted to know our personal performance.
+From this we started using an already existing excel to record our games.
+After some time I decided to take some time to create fun graphs and statistique to look at, that how I did it.
 
+
+I decided to make it online to allow my friend to be able to use it, from this idea I decided to use Deepnote,
 Visit the [Notebook](https://deepnote.com/workspace/vanjotom-690650e7-21e6-4e93-ab8c-6a827642f688/project/BabyFoot-4a2ef5da-34d9-49ae-ac9a-5186cf57ff1d/notebook/CleanCsv-7f49f2b3e4e64f3fb8a2e2f49c1d9c11)!
 
-The first step was to clean the excel of useless information:
+
+I created two main files, one were I cleaned to excel from useless information to make it easier to use, the second one is were I make all the calculation.
+
+## Part 1, look at the file.
+Let's get a look at the file:
+```python
+import pandas as pd
+df = pd.read_csv('babyfoot.csv', delimiter=';')
+df.head()
+```
+![image](/content/data/Baby-foot-Statistics/excel_babyfoot.jpg)
+
+As we can see there is a lot of useless information, there were already some calculation that we made but I didn't want to use them, the next step was to clean the excel.
 
 ```python
 import pandas as pd
-df = pd.read_csv('babyfoot_cleaned.csv', delimiter=';')
-df.head()
+df = pd.read_csv('baby2.csv', delimiter=',',skiprows=10)
+print('Columns before dropping NaNs:', df.columns)
+
+# Drop columns that are completely NaN
+cleaned_df = df.dropna(axis=1, how='all')
+
+print('Columns after dropping NaNs:', cleaned_df.columns)
+
+# Drop columns 'Unnamed: 3' and 'Unnamed: 18' (unknown columns)
+cleaned_df = df.loc[:,['Home', 'Visitor', 'H_s', 'V_s']]
+
+# Checking the columns after dropping NaN columns
+remaining_columns = cleaned_df.columns
+print('Columns after dropping NaNs and unknown columns:', remaining_columns)
+
+cleaned_df.to_csv('babyfoot_cleaned.csv', index=False, sep=';')
+
+cleaned_df
 ```
 
+After erasing all the data that I didn't want I ended up with this :
+![image](/content/data/Baby-foot-Statistics/excel_babyfoot_clean.jpg)
+
+As we can see deepnote already create some data about each row, and it give some ideas about what I wanted to achieve with this data.
+
+
+## Part 2, extract the information
 ```python
 # Calculate the win rate for each player
 
@@ -191,7 +227,7 @@ print("players_history : ", players_history)
 print("players_history_goals : ", players_history_goals)
 ```
 
-
+## Part 3, Graphs Graphs and more graphs
 ```python
 # Extract all players
 players = list(win_rates_confrontation.keys())
