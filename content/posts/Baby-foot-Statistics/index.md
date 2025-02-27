@@ -3,7 +3,7 @@ title = 'Baby-foot statistics'
 date = 2024-09-28T13:13:39+02:00
 draft = false
 summary = "Statistiques from baby-games played with friends"
-author: ["Joseph Vankelegom"]
+author = "Joseph Vankelegom"
 +++
 
 ## Introduction
@@ -27,7 +27,7 @@ import pandas as pd
 df = pd.read_csv('babyfoot.csv', delimiter=';')
 df.head()
 ```
-[image](/content/data/Baby-foot-Statistics/excel_babyfoot.jpg)
+[image](images/excel_babyfoot.jpg)
 
 As we can see there is a lot of useless information, there were already some calculation that we made but I didn't want to use them, the next step was to clean the excel.
 
@@ -54,7 +54,7 @@ cleaned_df
 ```
 
 After erasing all the data that I didn't want I ended up with this :
-[image](/content/data/Baby-foot-Statistics/excel_babyfoot_clean.jpg)
+[image](images/excel_babyfoot_clean.jpg)
 
 As we can see deepnote already create some data about each row, and it give some ideas about what I wanted to achieve with this data.
 
