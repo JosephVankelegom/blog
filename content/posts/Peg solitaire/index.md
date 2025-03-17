@@ -1,6 +1,6 @@
 +++
 title = 'peg solitaire'
-date = 2025-03-00:00
+date = 2025-03
 draft = false
 summary = "Algorithm for peg solitaire game"
 author = "Joseph Vankelegom"
