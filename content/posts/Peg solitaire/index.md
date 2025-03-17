@@ -3,6 +3,8 @@ title = 'peg solitaire'
 date = 2025-03-17
 draft = false
 summary = "Algorithm for peg solitaire game"
+cover:
+  image: "<images/peg_solitaire>"  # Path to image
 author = "Joseph Vankelegom"
 +++
 Work in progress
