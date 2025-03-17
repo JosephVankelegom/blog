@@ -5,7 +5,7 @@ draft = false
 summary = "Statistiques from baby-games played with friends"
 author = "Joseph Vankelegom"
 +++
-
+Work in progress
 ## Introduction
 
 During the year 2024, I started playing baby-foot with friends.
@@ -60,6 +60,169 @@ As we can see deepnote already create some data about each row, and it give some
 
 
 ## Part 2, extract the information
+
+For this part I decided  to try the Deepnote IA.
+
+Here are some example of the code this IA provided me:
+
+![image](images/IA_Q18VpSpP.png)
+
+the answer would be something like this: 
+```python
+player_stats = {}
+for index, row in cleaned_df.iterrows():
+    home_player = row['Home']
+    visitor_player = row['Visitor']
+    home_score = row['H_s']  # Fix variable name
+    visitor_score = row['V_s']
+    
+    # Initialize player if not already present
+    if home_player not in player_stats:
+        player_stats[home_player] = {'wins_home': 0, 'wins_away': 0, 'losses_home': 0, 'losses_away': 0, 'longest_streak':0, 'actual_streak':0, 'total_games': 0}
+    if visitor_player not in player_stats:
+        player_stats[visitor_player] = {'wins_home': 0, 'wins_away': 0, 'losses_home': 0, 'losses_away': 0, 'longest_streak':0, 'actual_streak':0, 'total_games': 0}
+    
+    if home_player not in player_stats[visitor_player]:
+        player_stats[visitor_player][home_player] = {'wins_home': 0, 'wins_away': 0, 'losses_home': 0, 'losses_away': 0, 'longest_streak':0, 'actual_streak':0, 'total_games': 0}
+    if visitor_player not in player_stats[home_player]:
+        player_stats[home_player][visitor_player] = {'wins_home': 0, 'wins_away': 0, 'losses_home': 0, 'losses_away': 0, 'longest_streak':0, 'actual_streak':0, 'total_games': 0}
+        
+    # Increment total games for both players
+    player_stats[home_player]['total_games'] += 1
+    player_stats[visitor_player]['total_games'] += 1
+
+    player_stats[home_player][visitor_player]['total_games'] += 1
+    player_stats[visitor_player][home_player]['total_games'] += 1 
+    
+    
+    if home_score > visitor_score:
+
+        player_stats[home_player]['wins_home'] += 1
+        player_stats[visitor_player]['losses_away'] += 1
+
+        player_stats[home_player][visitor_player]['wins_home'] += 1
+        player_stats[visitor_player][home_player]['losses_away'] += 1
+
+        player_stats[home_player]['actual_streak'] += 1
+        player_stats[visitor_player]['actual_streak'] = 0
+
+        player_stats[home_player][visitor_player]['actual_streak'] += 1
+        player_stats[visitor_player][home_player]['actual_streak'] = 0
+
+```
+
+And for every question, it would recreate an entire for loop, with new variables and reiterate through the whole table.
+
+this raise several problems:
+
+1) It make the code very slow since it need to run through the table several times, and as we know, going to memory so many times is suboptimal (it take time)
+2) The code it quite ugly, a lot of if/else, you don't know what is where, it is unecceraly long also.
+
+The first one is quite easy to fix, all the for loop cna be united under the same loop.
+but after this first phase we are still left with hunderds of lines of code (the where several graphs made).
+The second cna take a little more time:
+- regroup the if/else to a setdefault()
+```python
+    if home_player not in player_stats:
+        player_stats[home_player] = {'wins_home': 0, 'wins_away': 0, 'losses_home': 0, 'losses_away': 0, 'longest_streak':0, 'actual_streak':0, 'total_games': 0}
+    if visitor_player not in player_stats:
+        player_stats[visitor_player] = {'wins_home': 0, 'wins_away': 0, 'losses_home': 0, 'losses_away': 0, 'longest_streak':0, 'actual_streak':0, 'total_games': 0}
+```
+- erase a big if/else generated to check which player had won 
+```python
+    # Increment win and loss counts
+    if home_score > visitor_score:
+    player_stats[home_player]['wins_home'] += 1
+    player_stats[visitor_player]['losses_away'] += 1
+    ...
+    else
+    player_stats[home_player]['losses_home'] += 1
+    player_stats[visitor_player]['wins_away'] += 1
+    ...
+```
+- use already existing python functions:
+```python
+    if player_stats[winner_player]['actual_streak'] > player_stats[winner_player]['longest_streak']:
+        player_stats[winner_player]['longest_streak'] = player_stats[winner_player]['actual_streak']
+
+```
+
+with those changes I made the code a little cleaner and made it shorter by 1/3.
+
+One case when the IA was quite useful was for calculating the moving average,
+I was ready to start calculating the moving average using a for loop on the last games,
+but a decided to ask the IA and it used: "convolution", I didn't though of using it but it exactly what I was going to code.
+It made the code way simpler and straitfoward.
+
+
+
+## Part 3, Graphs Graphs and more graphs
+
+For the presentation of the data, I tried using different kind of graphical representation,
+I know that they are maybe not the most useful for each case but it was a way learn new kinds of functions of pyplot.
+
+![image](images/G1WRPS.png)
+![image](images/G2MAJvR.png)
+![image](images/G3RCWR.png)
+![image](images/G4DS.png)
+![image](images/G5HMD.png)
+
+
+
+All the old code, 
+```python
+import matplotlib.pyplot as plt
+
+# Extracting data for plotting
+players = list(win_rates.keys())
+home_win_rates = [win_rates[player]['home'] for player in players]
+away_win_rates = [win_rates[player]['away'] for player in players]
+total_win_rates = [win_rates[player]['total'] for player in players]
+
+# Plotting the win rates
+fig, ax = plt.subplots(figsize=(10, 6))
+
+
+bar_width = 0.2
+index = range(len(players))
+
+bar1 = ax.bar(index, home_win_rates, bar_width, label='Home Win Rate')
+bar2 = ax.bar([i + bar_width for i in index], away_win_rates, bar_width, label='Away Win Rate')
+bar3 = ax.bar([i + 2 * bar_width for i in index], total_win_rates, bar_width, label='Total Win Rate')
+
+# Adding the win rate values on top of the bars
+for i in index:
+    ax.text(i, home_win_rates[i] + 0.01, f'{home_win_rates[i]:.2f}', ha='center')
+    ax.text(i + bar_width, away_win_rates[i] + 0.01, f'{away_win_rates[i]:.2f}', ha='center')
+    ax.text(i + 2 * bar_width, total_win_rates[i] + 0.01, f'{total_win_rates[i]:.2f}', ha='center')
+    # Adding side labels
+    ax.text(i, home_win_rates[i] / 2, 'Home', ha='center', va='center', color='white', rotation='vertical', fontfamily='serif', fontweight='bold')
+    ax.text(i + bar_width, away_win_rates[i] / 2, 'Away', ha='center', va='center', color='white', rotation='vertical', fontfamily='monospace', fontweight='bold')
+    ax.text(i + 2 * bar_width, total_win_rates[i] / 2, 'Total', ha='center', va='center', color='white', rotation='vertical', fontfamily='sans-serif', fontweight='bold')
+
+ax.set_xlabel('')
+ax.set_ylabel('')
+ax.set_title('Win Rates by Player and side')
+ax.set_xticks([i + bar_width for i in index])
+ax.set_xticklabels(players)
+
+# Add grid lines
+ax.grid(axis='y', linestyle='--', alpha=0.5)
+ax.grid(axis='x', linestyle='')
+ax.set_axisbelow(True)
+
+# Remove the spines
+ax.spines['top'].set_visible(False)
+ax.spines['right'].set_visible(False)
+ax.spines['left'].set_visible(False)
+
+#ax.legend()
+
+plt.show()
+```
+
+
+
 ```python
 # Calculate the win rate for each player
 
@@ -226,79 +389,4 @@ print("cancha : ", cancha)
 print("players_history : ", players_history)
 
 print("players_history_goals : ", players_history_goals)
-```
-
-## Part 3, Graphs Graphs and more graphs
-```python
-# Extract all players
-players = list(win_rates_confrontation.keys())
-
-# Print header
-print(f"{'Player':<5} {'vs Player':<10} {'Home Win %':<12} {'Away Win %':<12} {'# Games Home':<12} {'# Games Away':<12} {'Win Home':<12} {'Win Away':<12}")
-
-# Print data rows
-for player1 in players:
-    
-    for player2 in players:
-        if player1 != player2:
-            data = win_rates_confrontation[player1].get(player2, {})
-            home_win_percent = data.get('home', 0) * 100
-            away_win_percent = data.get('away', 0) * 100
-            games_home = data.get('#gamesHome', 0)
-            games_away = data.get('#gamesAway', 0)
-            win_home = data.get('win_home', 0)
-            win_away = data.get('win_away', 0)
-            print(f"{player1:<5} {player2:<10} {home_win_percent:<12.2f} {away_win_percent:<12.2f} {games_home:<12} {games_away:<12}, {win_home}, {win_away}")
-```
-
-
-```python
-import matplotlib.pyplot as plt
-
-# Extracting data for plotting
-players = list(win_rates.keys())
-home_win_rates = [win_rates[player]['home'] for player in players]
-away_win_rates = [win_rates[player]['away'] for player in players]
-total_win_rates = [win_rates[player]['total'] for player in players]
-
-# Plotting the win rates
-fig, ax = plt.subplots(figsize=(10, 6))
-
-
-bar_width = 0.2
-index = range(len(players))
-
-bar1 = ax.bar(index, home_win_rates, bar_width, label='Home Win Rate')
-bar2 = ax.bar([i + bar_width for i in index], away_win_rates, bar_width, label='Away Win Rate')
-bar3 = ax.bar([i + 2 * bar_width for i in index], total_win_rates, bar_width, label='Total Win Rate')
-
-# Adding the win rate values on top of the bars
-for i in index:
-    ax.text(i, home_win_rates[i] + 0.01, f'{home_win_rates[i]:.2f}', ha='center')
-    ax.text(i + bar_width, away_win_rates[i] + 0.01, f'{away_win_rates[i]:.2f}', ha='center')
-    ax.text(i + 2 * bar_width, total_win_rates[i] + 0.01, f'{total_win_rates[i]:.2f}', ha='center')
-    # Adding side labels
-    ax.text(i, home_win_rates[i] / 2, 'Home', ha='center', va='center', color='white', rotation='vertical', fontfamily='serif', fontweight='bold')
-    ax.text(i + bar_width, away_win_rates[i] / 2, 'Away', ha='center', va='center', color='white', rotation='vertical', fontfamily='monospace', fontweight='bold')
-    ax.text(i + 2 * bar_width, total_win_rates[i] / 2, 'Total', ha='center', va='center', color='white', rotation='vertical', fontfamily='sans-serif', fontweight='bold')
-
-ax.set_xlabel('')
-ax.set_ylabel('')
-ax.set_title('Win Rates by Player and side')
-ax.set_xticks([i + bar_width for i in index])
-ax.set_xticklabels(players)
-
-# Add grid lines
-ax.grid(axis='y', linestyle='--', alpha=0.5)
-ax.grid(axis='x', linestyle='')
-ax.set_axisbelow(True)
-
-# Remove the spines
-ax.spines['top'].set_visible(False)
-ax.spines['right'].set_visible(False)
-ax.spines['left'].set_visible(False)
-
-#ax.legend()
-
-plt.show()
 ```
