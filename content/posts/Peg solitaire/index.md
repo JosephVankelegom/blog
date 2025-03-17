@@ -1,14 +1,14 @@
-+++
-title = 'peg solitaire'
-date = 2025-03-17
-draft = false
-summary = "Algorithm for peg solitaire game"
-author = "Joseph Vankelegom"
-[cover]
-image: "images/peg_solitaire.jpg" 
-alt: "Peg solitaire board"  # Accessibility
-relative: true  # If image is stored in content folder
-+++
+---
+title: "peg solitaire"
+date: 2025-03-17
+draft: false
+summary: "Algorithm for peg solitaire game"
+author: "Joseph Vankelegom"
+cover:
+  image: "images/peg_solitaire.jpg"
+  alt: "Peg solitaire board"
+  relative: true
+---
 Work in progress
 ## Introduction
 let's work on some algorithms, as a focus point for those algorithms I decided to used games,
