@@ -3,11 +3,11 @@ title = 'peg solitaire'
 date = 2025-03-17
 draft = false
 summary = "Algorithm for peg solitaire game"
-cover:
-  image: "images/peg_solitaire.jpg" 
-  alt: "Peg solitaire board"  # Accessibility
-  relative: true  # If image is stored in content folder
 author = "Joseph Vankelegom"
+[cover]
+image: "images/peg_solitaire.jpg" 
+alt: "Peg solitaire board"  # Accessibility
+relative: true  # If image is stored in content folder
 +++
 Work in progress
 ## Introduction
