@@ -4,10 +4,7 @@ date: 2025-03-17
 draft: false
 summary: "Algorithm for peg solitaire game"
 author: "Joseph Vankelegom"
-cover:
-  image: "images/peg_solitaire.jpg"
-  alt: "Peg solitaire board"
-  relative: true
+relative: true
 ---
 Work in progress
 ## Introduction
@@ -17,6 +14,14 @@ here is the link to the [Github](https://github.com/JosephVankelegom/peg_solitai
 
 the first part is to recreate the game:
 
+![image](images/peg_array.png)
+
+there are three kinds of spaces:
+1) "0", if there is a piece in that place
+2) " ", if there is no piece in that place
+3) ".", if it's not a valid place.
+
+
 ## Create the game.
 
 ```python
@@ -24,7 +29,7 @@ the first part is to recreate the game:
 ```
 
 
-<!---![image](images/excel_babyfoot_clean.jpg)-->
+<!----->
 
 
 
