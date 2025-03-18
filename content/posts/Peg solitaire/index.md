@@ -18,7 +18,7 @@ Peg solitaire is a board game for one player involving movement of pegs on a boa
 The standard game fills the entire board with pegs except for the central hole. The objective is,
 making valid moves, to empty the entire board except for a solitary peg in the central hole. ref wikipedia
 A valid move is to jump a peg orthogonally over an adjacent peg into a hole two positions away and then to remove the jumped peg.
-
+![image](images/solit03.gif)
 
 the first part is to recreate the game:
 
